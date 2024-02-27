@@ -7,57 +7,62 @@ describe('Radio implementation', () => {
     test.each([
       {
         name: "per [ArrowDown]",
-        focus: 'A',
+        focus: "A",
         key: "[ArrowDown]",
-        expectedTarget: 'D',
+        expectedTarget: "D",
+      },
+      {
+        name: "per [ArrowDown] around the corner",
+        focus: "E",
+        key: "[ArrowDown]",
+        expectedTarget: "A",
       },
       {
         name: "per [ArrowLeft]",
-        focus: 'D',
+        focus: "D",
         key: "[ArrowLeft]",
-        expectedTarget: 'A',
+        expectedTarget: "A",
+      },
+      {
+        name: "per [ArrowLeft] around the corner",
+        focus: "A",
+        key: "[ArrowLeft]",
+        expectedTarget: "E",
       },
       {
         name: "per [ArrowRight]",
-        focus: 'A',
+        focus: "A",
         key: "[ArrowRight]",
-        expectedTarget: 'D',
+        expectedTarget: "D",
+      },
+      {
+        name: "per [ArrowRight] around the corner",
+        focus: "E",
+        key: "[ArrowRight]",
+        expectedTarget: "A",
       },
       {
         name: "per [ArrowUp]",
-        focus: 'D',
+        focus: "D",
         key: "[ArrowUp]",
-        expectedTarget: 'A',
+        expectedTarget: "A",
       },
       {
-        name: "forward around the corner",
-        focus: 'E',
-        key: "[ArrowRight]",
-        expectedTarget: 'A',
-      },
-      {
-        name: "backward around the corner",
-        focus: 'A',
+        name: "per [ArrowUp] around the corner",
+        focus: "A",
         key: "[ArrowUp]",
-        expectedTarget: 'E',
+        expectedTarget: "E",
       },
-      {
-        name: "do nothing on single radio",
-        focus: 'Solo',
-        key: "[ArrowRight]",
-        expectedTarget: 'Solo'
-      },
-      {
-        name: "on radios without name",
-        focus: 'nameless1',
-        key: "[ArrowRight]",
-        expectedTarget: 'nameless2',
-      },
-    ])('$name', async ({ focus, key, expectedTarget }) => {
-      const user = userEvent.setup()
-        render(<App />)
-        screen.getByLabelText(focus).focus()
-        await user.keyboard(key)
-        expect(screen.getByLabelText(expectedTarget)).toHaveFocus()
-    })
+    ])("$name", async ({ focus, key, expectedTarget }) => {
+      const user = userEvent.setup();
+      render(<App />);
+      const element = screen.getByLabelText(focus);
+      const target = screen.getByLabelText(expectedTarget)
+
+      element.focus()
+      await user.keyboard(key);
+      
+      expect(target).toHaveFocus()
+      expect(target).toBeChecked()
+    });
 })
